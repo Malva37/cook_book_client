@@ -1,8 +1,7 @@
 export interface IRecipe{
-    id:number;
-    idParent:number;
-    name:string;
-    date:string;
+    recipeId:number;
+    parentRecipeId:number;
+    nameRecipe:string;
     description:string;
-    collection:Array<IRecipe>;
+    createdDate:string;
 }

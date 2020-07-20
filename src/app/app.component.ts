@@ -19,15 +19,17 @@ export class AppComponent {
   title = 'CookBook';
   modalRef: BsModalRef;
   formData: Recipe;
-  recipes: Array<IRecipe> = [];
+  recipes: any;
   recipe: IRecipe;
-  editStatus: boolean;
-  name: string;
-  id: number;
-  idParent: number;
+  editStatus: boolean = false;
+  nameRecipe: string;
+  recipeId: number;
+  parentRecipeId: number;
   description: string;
-  date: string;
-  collection: Array<IRecipe>;
+  createdDate: string;
+  currentRecipe = null;
+  currentIndex = -1;
+
 
   ngOnInit() {
     this.getAllRecipes();
@@ -36,9 +38,11 @@ export class AppComponent {
 
 
   getAllRecipes() {
-    this.service.getJSONRecipes().subscribe(
+    this.service.getAll().subscribe(
       data => {
         this.recipes = data;
+      }, error =>{
+        console.log(error);
       }
     );
     this.resetForm();
@@ -50,13 +54,14 @@ export class AppComponent {
       form.resetForm();
     }
     this.service.formData = {
-      id: null,
-      idParent: null,
-      name: '',
-      date: '',
+      recipeId: null,
+      parentRecipeId: null,
+      nameRecipe: '',
       description: '',
-      collection: []
+      createdDate:''
     };
+    this.currentRecipe = null;
+    this.currentIndex = -1;
   }
 
   openModal(template: TemplateRef<any>, recipe) {
@@ -71,15 +76,16 @@ export class AppComponent {
     let d = new Date();
     console.log(d.getTime());
 
-    // data.date = toString(new Date());
-    // console.log(data.date);
-
     // if (!this.editStatus) {
-    this.service.postJSONRecipes(data)
+    this.service.create(data)
       .subscribe(
         res => {
           console.log(res);
-          this.getAllRecipes();
+          this.editStatus =true;
+          // this.getAllRecipes();
+        }, error =>{
+          console.log(error);
+          
         });
     // } else {
     //   this.service.updateBanknote(data).subscribe(
