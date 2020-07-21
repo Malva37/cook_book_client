@@ -23,8 +23,8 @@ export class AppComponent {
   recipe: IRecipe;
   editStatus: boolean = false;
   nameRecipe: string;
-  recipeId: number;
-  parentRecipeId: number;
+  id: number;
+  parentId: number;
   description: string;
   createdDate: string;
   currentRecipe = null;
@@ -40,8 +40,12 @@ export class AppComponent {
   getAllRecipes() {
     this.service.getAll().subscribe(
       data => {
+        console.log(data);
+
         this.recipes = data;
-      }, error =>{
+        console.log(this.recipes);
+
+      }, error => {
         console.log(error);
       }
     );
@@ -49,16 +53,27 @@ export class AppComponent {
   }
 
 
+  showChildren(recipe){
+    console.log(recipe.id);
+    this.service.get(recipe.id).subscribe(
+      data =>{
+        console.log(data);
+        
+      }
+    )
+    
+  }
+
   resetForm(form?) {
     if (form != null) {
       form.resetForm();
     }
     this.service.formData = {
-      recipeId: null,
-      parentRecipeId: null,
-      nameRecipe: '',
+      id: null,
+      parentId: null,
+      name: '',
       description: '',
-      createdDate:''
+      createdDate: ''
     };
     this.currentRecipe = null;
     this.currentIndex = -1;
@@ -74,18 +89,17 @@ export class AppComponent {
   onSubmit(form: NgForm) {
     const data: IRecipe = Object.assign({}, form.value);
     let d = new Date();
-    console.log(d.getTime());
-
+    let dd = String(d.getDate()).padStart(2, '0');
+    let mm = String(d.getMonth() + 1).padStart(2, '0'); //January is 0!
+    let yyyy = d.getFullYear();
+    data.createdDate =  dd + '/' + mm + '/' + yyyy;
     // if (!this.editStatus) {
     this.service.create(data)
       .subscribe(
         res => {
           console.log(res);
-          this.editStatus =true;
-          // this.getAllRecipes();
-        }, error =>{
-          console.log(error);
-          
+          // this.editStatus =true;
+          this.getAllRecipes();
         });
     // } else {
     //   this.service.updateBanknote(data).subscribe(

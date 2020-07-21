@@ -5,21 +5,22 @@
   </header>
 
   <main>
-      <button class="addOne" (click)="openModal(newRecipe,$event)">Додай страву</button>
-    <ul class="treeRecipes">
-      <li class="recipe" *ngFor="let item of recipes">
-      <div class="title">
+    <button class="addOne" (click)="openModal(newRecipe,$event)">Додай страву</button>
+    <ul class="treeRecipes" *ngFor="let item of recipes">
+      <li class="recipe" *ngIf="(item.parentId==null)" (click)="showChildren(item)">
+        <div>{{item}}</div>
+        <div class="title">
           <span>{{item.name}}</span>
         </div>
         <div class="date">
-          <span>{{item.date}}</span>
+          <span>{{item.createdDate}}</span>
         </div>
         <div class="description">
           <span><b>Рецепт:</b> {{item.description}}</span>
         </div>
         <div class="controlButtons">
           <button class="addInside" (click)="openModal(newRecipe,item )">Додати</button>
-          <button class="remove" (click)="openModal(newRecipe,item )" >Змінити</button>
+            <button class="remove" (click)="openModal(newRecipe,item )">Змінити</button>
         </div>
       </li>
     </ul>
@@ -33,34 +34,34 @@
       </div>
 
       <div class="modalBody">
-    
+
         <form #form="ngForm" autocomplete="off" (submit)="onSubmit(form)">
-    
-          <input type="hidden" name="recipeId" #recipeId="ngModel" [(ngModel)]="service.formData.recipeId">
-          <input type="hidden" name="parentRecipeId" #parentRecipeId="ngModel" [(ngModel)]="service.formData.parentRecipeId">
+
+          <input type="hidden" name="id" #id="ngModel" [(ngModel)]="service.formData.id">
+          <input type="hidden" name="parentId" #parentId="ngModel" [(ngModel)]="service.formData.parentId">
           <input type="hidden" name="createdDate" #date="ngModel" [(ngModel)]="service.formData.createdDate">
-        
-    
+
+
           <div class="field">
             <div class="titleField">Назва страви:</div>
-            <input  name="nameRecipe" #nameRecipe="ngModel" [(ngModel)]="service.formData.nameRecipe" class="form-control" required>
+            <input name="name" #name="ngModel" [(ngModel)]="service.formData.name" class="form-control" required>
           </div>
-    
+
           <div class="field">
             <div class="titleField">Рецепт:</div>
             <textarea type="text" name="description" #description="ngModel" [(ngModel)]="service.formData.description"
               class="form-control">
                 </textarea>
           </div>
-    
+
           <div class="field">
             <button type="submit" (click)="modalRef.hide()" [disabled]="form.invalid" class="btnAdd">Додати</button>
           </div>
-    
+
         </form>
       </div>
 
-      
+
     </ng-template>
   </main>
 

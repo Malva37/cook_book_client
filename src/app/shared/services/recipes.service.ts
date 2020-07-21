@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { IRecipe } from "../interfaces/recipe.interfaces";
 import { Recipe } from "../classes/recipe.model";
 
-const baseUrl: string = "http://localhost:8080/api/recipes";
+const baseUrl: string = "http://localhost:8080";
 
 
 @Injectable({
@@ -31,17 +31,6 @@ export class RecipesService {
   update(id,data){
     return this.http.put(`${baseUrl}/${id}`,data);
   }
-  // this.url = "http://localhost:3000/recipes"
-  // }
-
-  // getJSONRecipes(): Observable<Array<IRecipe>> {
-  //   return this.http.get<Array<IRecipe>>(this.url)
-  // }
-
-  // postJSONRecipes(recipe): Observable<Array<IRecipe>> {
-  //   return this.http.post<Array<IRecipe>>(this.url, recipe)
-  // }
-
 
 
 }

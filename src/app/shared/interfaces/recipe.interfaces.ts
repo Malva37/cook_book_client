@@ -1,7 +1,7 @@
 export interface IRecipe{
-    recipeId:number;
-    parentRecipeId:number;
-    nameRecipe:string;
+    id:number;
+    parentId:number;
+    name:string;
     description:string;
     createdDate:string;
 }
