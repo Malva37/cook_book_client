@@ -4,4 +4,5 @@ export interface IRecipe{
     name:string;
     description:string;
     createdDate:string;
+    children?:Array<IRecipe>
 }

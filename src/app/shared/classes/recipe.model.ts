@@ -6,7 +6,8 @@ export class Recipe implements IRecipe {
         public parentId: number,
         public name: string,
         public description: string,
-        public createdDate: string
+        public createdDate: string,
+        public children?:Array<IRecipe>
     ) { }
 
 }

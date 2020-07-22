@@ -16,8 +16,8 @@ export class RecipesService {
 
   constructor(private http: HttpClient) { }
 
-  getAll() {
-    return this.http.get(baseUrl);
+  getAll(id) {
+    return this.http.get(baseUrl + '/parentId?parentId=' +id);
   }
 
   get(id) {
