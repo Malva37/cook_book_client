@@ -5,7 +5,7 @@
   </header>
 
   <main>
-    <!-- <button class="addOne" (click)="openModal(newRecipe,$event)">Додай страву</button> -->
+    <button class="addOne" (click)="openModal(newRecipe,$event)">Додай страву</button>
     <!-- <ul class="treeRecipes" *ngFor="let item of recipes">
       <li class="recipe" *ngIf="(item.parentId==null)" (click)="showChildren(item)">
         <div>{{item}}</div>
@@ -41,30 +41,33 @@
     <ul>
       <ng-container *ngTemplateOutlet="recursiveListTmpl; context:{ list: list }"></ng-container>
     </ul>
-
     <ng-template #recursiveListTmpl let-list="list">
       <ul *ngFor="let item of list">
-      <li class="recipe" (click)="showChildren(item)" >
-        <div class="title">
-          <span>{{item.name}}</span>
-        </div>
-        <div class="date">
-          <span>{{item.createdDate}}</span>
-        </div>
-        <div class="description">
-          <span><b>Рецепт:</b> {{item.description}}</span>
-        </div>
-        <p>{{item.children}}</p>
-        <div class="controlButtons">
-          <button class="addInside" (click)="openModal(newRecipe,item )">Додати</button>
-          <button class="remove" (click)="openModal(newRecipe,item )">Змінити</button>
-        </div>
-        <ul *ngIf="item.children?.length > 0">
-          <ng-container *ngTemplateOutlet="recursiveListTmpl; context:{ list: item.children }"></ng-container>
-        </ul>
-      </li>
-    </ul>
+    
+        <li class="recipe" (mouseenter)="showButtons($event.target);$event.stopPropagation()"
+          (click)="showChildren(item); $event.stopPropagation();">
+          <div class="dataRecipe">
+            <div class="title">
+              <span>{{item.name}}</span>
+            </div>
+            <div class="date">
+              <span>{{item.createdDate | date}}</span>
+            </div>
+            <div class="description">
+              <span><b>Рецепт:</b> {{item.description}}</span>
+            </div>
+          </div>
+          <div class="controlButtons">
+            <button class="addInside" (click)="openModal(newRecipe,item )">Додати</button>
+            <button class="remove" (click)="onEdit(newRecipe,item)">Змінити</button>
+          </div>
+          <ul *ngIf="item.children?.length > 0">
+            <ng-container *ngTemplateOutlet="recursiveListTmpl; context:{ list: item.children }"></ng-container>
+          </ul>
+        </li>
+      </ul>
     </ng-template>
+
 
 
     <ng-template #newRecipe>

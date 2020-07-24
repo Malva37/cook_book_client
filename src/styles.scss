@@ -35,15 +35,18 @@ main {
   box-shadow: 0 12px 20px 0 #909090
 }
 
-.recipe:hover {
-  .controlButtons {
-    display: block;
-    width: 20%;
-  }
+.recipe:hover >.controlButtons{
+  display: block;
+  width: 20%;
+  padding: 1%;
+} 
 
-  .description span {
-    width: 75%;
-  }
+ul {
+  list-style: none;
+  position: relative;
+  top: 5px;
+  padding: 1%;
+
 }
 
 .recipe {
@@ -51,34 +54,39 @@ main {
   box-shadow: 0 6px 10px 0 rgba(144, 144, 144, 0.5), 0 6px 10px 0 rgba(144, 144, 144, 0.5);
   -webkit-transition: box-shadow, 0.25s ease-in-out;
   transition: box-shadow, 0.25s ease-in-out;
-  display: flex;
   padding: 1%;
   border: 1px solid #000;
-  margin-bottom: 1%;
   text-align: center;
-  position: relative;
 }
 
-.recipe div {
-  margin: 0 1%;
+.dataRecipe {
+  display: flex;
+  justify-content: flex-start;
+
 }
+
+.dataRecipe div {
+  margin-left: 1%;
+}
+
 
 .controlButtons {
   display: none;
   position: absolute;
-  top: 25%;
+  top: 2%;
+  padding: 1%;
   right: 0px;
 }
-.addInside, .remove{
-    font-size: 15px;
-    border: 1px solid #000;
-    margin-left: 1%;
-    padding: 1%;
-    border-radius: 5%;
-    background-color: white;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 
-
+.addInside,
+.remove {
+  font-size: 15px;
+  border: 1px solid #000;
+  margin-left: 1%;
+  padding: 1%;
+  border-radius: 5%;
+  background-color: white;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 .title span {
@@ -103,14 +111,18 @@ main {
   overflow: hidden;
 
 }
-.field{
+
+.field {
   padding: 1% 5%;
   margin-bottom: 2%;
 }
-.titleField, .modal-title{
+
+.titleField,
+.modal-title {
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
-.btnAdd{
+
+.btnAdd {
   background-color: black;
   color: white;
   box-shadow: 0 6px 10px 0 rgba(144, 144, 144, 0.5), 0 6px 10px 0 rgba(144, 144, 144, 0.5);
@@ -123,15 +135,16 @@ main {
   width: 100%;
   height: 10%;
 }
-.addOne{
+
+.addOne {
   margin-bottom: 1%;
   font-size: 17px;
   box-shadow: 0 6px 10px 0 rgba(144, 144, 144, 0.5), 0 6px 10px 0 rgba(144, 144, 144, 0.5);
   transition: box-shadow, 0.25s ease-in-out;
   padding: 1%;
   border: 1px solid #000;
-  display:      block;
-  margin-left:  auto;
+  display: block;
+  margin-left: auto;
   margin-right: 0;
 
 }

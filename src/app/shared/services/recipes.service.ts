@@ -16,7 +16,7 @@ export class RecipesService {
 
   constructor(private http: HttpClient) { }
 
-  getAll(id) {
+  getAll(id?) {
     return this.http.get(baseUrl + '/parentId?parentId=' +id);
   }
 
@@ -25,11 +25,11 @@ export class RecipesService {
   }
 
   create(data) {
-    return this.http.post(baseUrl, data)
+    return this.http.post(baseUrl, data);
   }
   
-  update(id,data){
-    return this.http.put(`${baseUrl}/${id}`,data);
+  update(data){
+    return this.http.put(`${baseUrl}`,data);
   }
 
 
