@@ -9,7 +9,7 @@
     </ul>
     <ng-template #recursiveListTmpl let-recipeList="recipeList">
       <ul *ngFor="let item of recipeList">
-    
+
         <li class="recipe" (click)="showChildren(item); $event.stopPropagation();">
           <div class="dataRecipe">
             <div class="title">
@@ -23,8 +23,12 @@
             </div>
           </div>
           <div class="controlButtons" #changeStyle>
-            <button class="addInside" (click)="openModal(newRecipe,item )">Додати</button>
-            <button class="remove" (click)="onEdit(newRecipe,item)">Змінити</button>
+            <button class="addInside" (click)="openModal(newRecipe,item )">
+              <u>Додати</u>
+              /</button>
+            <button class="remove" (click)="onEdit(newRecipe,item)">
+              <u>Змінити</u>
+            </button>
           </div>
           <ul *ngIf="item.children?.length > 0">
             <ng-container *ngTemplateOutlet="recursiveListTmpl; context:{ recipeList: item.children }"></ng-container>
@@ -34,7 +38,7 @@
     </ng-template>
     <ng-template #newRecipe>
       <div class="modal-header">
-        <h4 class="modal-title pull-left" *ngIf="showCreateModal" >Додай страву</h4>
+        <h4 class="modal-title pull-left" *ngIf="showCreateModal">Додай страву</h4>
         <h4 class="modal-title pull-left" *ngIf="!showCreateModal">Зміни страву</h4>
         <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
           <span aria-hidden="true">&times;</span>
@@ -56,8 +60,10 @@
                 </textarea>
           </div>
           <div class="field">
-            <button type="submit" (click)="modalRef.hide()" [disabled]="form.invalid" class="btnAdd" *ngIf="showCreateModal">Додати</button>
-            <button type="submit" (click)="modalRef.hide()" [disabled]="form.invalid" class="btnAdd" *ngIf="!showCreateModal">Змінити</button>
+            <button type="submit" (click)="modalRef.hide()" [disabled]="form.invalid" class="btnAdd"
+              *ngIf="showCreateModal">Додати</button>
+            <button type="submit" (click)="modalRef.hide()" [disabled]="form.invalid" class="btnAdd"
+              *ngIf="!showCreateModal">Змінити</button>
           </div>
 
         </form>
