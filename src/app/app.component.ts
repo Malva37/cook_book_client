@@ -13,9 +13,6 @@ import { IRecipe } from './shared/interfaces/recipe.interfaces';
 })
 export class AppComponent {
 
-
-
-
   constructor(private modalService: BsModalService,
     public service: RecipesService) { }
 
@@ -23,20 +20,20 @@ export class AppComponent {
   modalRef: BsModalRef;
   formData: Recipe;
   recipe: IRecipe;
-  editStatus: boolean = false;
   nameRecipe: string;
   id: number;
   parentId: number;
   description: string;
   createdDate: string;
   recipeList: any = [];
-  showCreateModal:boolean=true;
-
+  editStatus: boolean = false;
+  showCreateModal: boolean = true;
+  readMore: boolean = false;
+  showChildrens: boolean = false;
 
   ngOnInit() {
     this.getAllRecipes("");
   }
-
 
   getAllRecipes(id) {
     this.service.getAll(id).subscribe(
@@ -51,13 +48,33 @@ export class AppComponent {
     );
   }
 
-  showChildren(recipe) {
+  showChildren(recipe, event?) {
+    this.showChildrens = !this.showChildrens;
     this.recipe = recipe;
-    this.service.getAll(recipe.id).subscribe(
-      data => {
-        recipe.children = data;
-      }
-    )
+    if (this.showChildrens) {
+      this.service.getAll(recipe.id).subscribe(
+        data => {
+          recipe.children = data;
+          this.showChildrens = true;
+          event.target.className = 'fa fa-angle-up';
+        }
+      )
+    } else {
+      recipe.children = [];
+      this.showChildrens = false;
+      event.target.className = 'fa fa-angle-down';
+    }
+  }
+
+  showText(event) {
+    this.readMore = !this.readMore;
+    if (this.readMore) {
+      event.target.classList = 'descriptionBig';
+      this.readMore = true;
+    } else {
+      event.target.classList = 'descriptionLittle';
+      this.readMore = false;
+    }
   }
 
   resetForm(form?) {
@@ -72,8 +89,8 @@ export class AppComponent {
       createdDate: '',
       children: []
     };
-
   }
+
   openModal(template: TemplateRef<any>, recipe) {
     this.modalRef = this.modalService.show(template);
     this.recipe = recipe;
@@ -88,7 +105,6 @@ export class AppComponent {
     this.editStatus = true;
     this.showCreateModal = false;
   }
-
 
   onSubmit(form: NgForm) {
     const data: IRecipe = Object.assign({}, form.value);
@@ -138,7 +154,7 @@ export class AppComponent {
     )
   }
 
-  showUpdatedRecipe(recipe: IRecipe, response: IRecipe) { 
+  showUpdatedRecipe(recipe: IRecipe, response: IRecipe) {
     if (recipe.id == response.id) {
       recipe.name = response.name;
       recipe.description = response.description;

@@ -8,6 +8,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DatePipe } from './shared/pipes/date.pipe';
+import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome'
+
 
 
 @NgModule({
@@ -22,6 +24,7 @@ import { DatePipe } from './shared/pipes/date.pipe';
     HttpClientModule,
     BrowserAnimationsModule,
     ModalModule.forRoot(),
+    Angular2FontawesomeModule 
   ],
   providers: [],
   bootstrap: [AppComponent]

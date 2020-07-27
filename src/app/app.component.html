@@ -9,26 +9,33 @@
     </ul>
     <ng-template #recursiveListTmpl let-recipeList="recipeList">
       <ul *ngFor="let item of recipeList">
-
-        <li class="recipe" (click)="showChildren(item); $event.stopPropagation();">
+        <li class="recipe">
           <div class="dataRecipe">
-            <div class="title">
-              <span>{{item.name}}</span>
+            <div class="icon">
+              <i (click)="showChildren(item, $event); $event.stopPropagation();" fa [name]="'angle-down'"></i>
             </div>
-            <div class="date">
-              <span>{{item.createdDate | date}}</span>
+            <div class="mainDataRecipe">
+              <div class="title">
+                <span>{{item.name}}</span>
+              </div>
+              <div class="descriptionLittle" (click)="showText($event); $event.stopPropagation();">
+                <b>Рецепт: </b>{{item.description}}
+              </div>
             </div>
-            <div class="description">
-              <span><b>Рецепт:</b> {{item.description}}</span>
+            <div class="buttonsDate">
+              <div class="controlButtons">
+                <button class="addInside" (click)="openModal(newRecipe,item )">
+                  <u>Додати</u>
+                  /</button>
+                <button class="remove" (click)="onEdit(newRecipe,item)">
+                  <u>Змінити</u>
+                </button>
+              </div>
+              <div class="date">
+                <span>{{item.createdDate | date}}</span>
+              </div>
+
             </div>
-          </div>
-          <div class="controlButtons" #changeStyle>
-            <button class="addInside" (click)="openModal(newRecipe,item )">
-              <u>Додати</u>
-              /</button>
-            <button class="remove" (click)="onEdit(newRecipe,item)">
-              <u>Змінити</u>
-            </button>
           </div>
           <ul *ngIf="item.children?.length > 0">
             <ng-container *ngTemplateOutlet="recursiveListTmpl; context:{ recipeList: item.children }"></ng-container>
