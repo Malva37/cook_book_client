@@ -80,23 +80,29 @@ ul {
 }
 
 .mainDataRecipe {
-  width: 80%;
+  width: 75%;
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   height: auto;
+  margin: 1% 0;
 }
 
 .buttonsDate {
-  width: 12%;
+  width: 17%;
 }
 
 .controlButtons {
   display: block;
 }
 
+.editInside i,
+.addInside i {
+  display: none;
+}
+
 
 .addInside,
-.remove {
+.editInside {
   font-size: 13px;
   border: none;
   background-color: white;
@@ -107,23 +113,26 @@ ul {
   font-size: 18px;
   width: 20%;
   font-weight: bold;
-  text-align: start;
+  padding: 0 1%;
 
 }
 
 .descriptionLittle {
   display: -webkit-box;
-  width: 95%;
+  width: 75%;
+  padding: 0 1%;
   -webkit-line-clamp: 2;
-  line-height: 25px;
-  max-height: 50px;
+  line-height: 20px;
+  max-height: 40px;
   overflow: hidden;
+  -webkit-box-orient: vertical;
 
 }
 
 .descriptionBig {
   display: -webkit-box;
-  width: 95%;
+  width: 75%;
+  padding: 0 1%;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: initial;
   line-height: initial;
@@ -174,24 +183,36 @@ ul {
 
 
 @media screen and (max-width:1200px)and (min-width:769px) {
-
-
   .title {
     font-size: 15px;
-    line-height: 0.9;
-
   }
 
   .recipe {
     font-size: 14px;
   }
+
+  .buttonsDate {
+    font-size: 13px;
+    width: 16%;
+  }
+
 }
 
 
 @media screen and (max-width:768px) and (min-width:320px) {
+  .titleBook {
+    font-size: 20px;
+  }
+
   .title {
     font-size: 12px;
+    width: 100%;
+    margin-bottom: 1%;
+  }
 
+  .descriptionLittle,
+  .descriptionBig {
+    width: 100%;
   }
 
   .mainDataRecipe {
@@ -199,7 +220,41 @@ ul {
     text-align: center;
   }
 
+  .addBig,
+  .editBig {
+    display: none;
+  }
+
+  .controlButtons {
+    display: flex;
+    justify-content: space-evenly;
+  }
+
+  .editInside i,
+  .addInside i {
+    display: block;
+  }
+
   .recipe {
     font-size: 12px;
+  }
+
+  .icon,
+  .buttonsDate {
+    margin-top: 3%;
+    font-size: 20px;
+  }
+
+  .controlButtons {
+    margin-bottom: 20%;
+  }
+
+  .date {
+    font-size: 7px;
+
+  }
+
+  ul {
+    padding-bottom: 2%;
   }
 }

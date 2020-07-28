@@ -25,10 +25,12 @@
             <div class="buttonsDate">
               <div class="controlButtons">
                 <button class="addInside" (click)="openModal(newRecipe,item )">
-                  <u>Додати</u>
-                  /</button>
-                <button class="remove" (click)="onEdit(newRecipe,item)">
-                  <u>Змінити</u>
+                  <u class="addBig">Додати /</u> 
+                  <i class="addSmall" fa [name]="'plus'"></i>
+                  </button>
+                <button class="editInside" (click)="onEdit(newRecipe,item)">
+                  <u class="editBig">Змінити</u>
+                  <i class="editSmall" fa [name]="'edit'"></i>
                 </button>
               </div>
               <div class="date">
@@ -42,6 +44,7 @@
           </ul>
         </li>
       </ul>
+
     </ng-template>
     <ng-template #newRecipe>
       <div class="modal-header">
@@ -72,12 +75,8 @@
             <button type="submit" (click)="modalRef.hide()" [disabled]="form.invalid" class="btnAdd"
               *ngIf="!showCreateModal">Змінити</button>
           </div>
-
         </form>
       </div>
-
-
     </ng-template>
   </main>
-
 </div>
