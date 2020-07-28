@@ -1,66 +1,82 @@
 <div class="container-fluid">
-
   <header>
     <div class="titleBook"> Твоя кулінарна книга</div>
   </header>
-
   <main>
-      <button class="addOne" (click)="openModal(newRecipe,$event)">Додай страву</button>
-    <ul class="treeRecipes">
-      <li class="recipe" *ngFor="let item of recipes">
-      <div class="title">
-          <span>{{item.name}}</span>
-        </div>
-        <div class="date">
-          <span>{{item.date}}</span>
-        </div>
-        <div class="description">
-          <span><b>Рецепт:</b> {{item.description}}</span>
-        </div>
-        <div class="controlButtons">
-          <button class="addInside" (click)="openModal(newRecipe,item )">Додати</button>
-          <button class="remove" (click)="openModal(newRecipe,item )" >Змінити</button>
-        </div>
-      </li>
+    <button class="addOne" (click)="openModal(newRecipe,$event)">Додай страву</button>
+    <ul>
+      <ng-container *ngTemplateOutlet="recursiveListTmpl; context:{ recipeList: recipeList }"></ng-container>
     </ul>
+    <ng-template #recursiveListTmpl let-recipeList="recipeList">
+      <ul *ngFor="let item of recipeList">
+        <li class="recipe">
+          <div class="dataRecipe">
+            <div class="icon">
+              <i (click)="showChildren(item, $event); $event.stopPropagation();" fa [name]="'angle-down'"></i>
+            </div>
+            <div class="mainDataRecipe">
+              <div class="title">
+                <span>{{item.name}}</span>
+              </div>
+              <div class="descriptionLittle" (click)="showText($event); $event.stopPropagation();">
+                <b>Рецепт: </b>{{item.description}}
+              </div>
+            </div>
+            <div class="buttonsDate">
+              <div class="controlButtons">
+                <button class="addInside" (click)="openModal(newRecipe,item )">
+                  <u class="addBig">Додати /</u> 
+                  <i class="addSmall" fa [name]="'plus'"></i>
+                  </button>
+                <button class="editInside" (click)="onEdit(newRecipe,item)">
+                  <u class="editBig">Змінити</u>
+                  <i class="editSmall" fa [name]="'edit'"></i>
+                </button>
+              </div>
+              <div class="date">
+                <span>{{item.createdDate | date}}</span>
+              </div>
 
+            </div>
+          </div>
+          <ul *ngIf="item.children?.length > 0">
+            <ng-container *ngTemplateOutlet="recursiveListTmpl; context:{ recipeList: item.children }"></ng-container>
+          </ul>
+        </li>
+      </ul>
+
+    </ng-template>
     <ng-template #newRecipe>
       <div class="modal-header">
-        <h4 class="modal-title pull-left">Додай страву</h4>
+        <h4 class="modal-title pull-left" *ngIf="showCreateModal">Додай страву</h4>
+        <h4 class="modal-title pull-left" *ngIf="!showCreateModal">Зміни страву</h4>
         <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-
       <div class="modalBody">
-    
         <form #form="ngForm" autocomplete="off" (submit)="onSubmit(form)">
-    
           <input type="hidden" name="id" #id="ngModel" [(ngModel)]="service.formData.id">
-          <input type="hidden" name="date" #date="ngModel" [(ngModel)]="service.formData.date">
-          <input type="hidden" name="collection" #collection="ngModel" [(ngModel)]="service.formData.collection">
-    
+          <input type="hidden" name="parentId" #parentId="ngModel" [(ngModel)]="service.formData.parentId">
+          <input type="hidden" name="createdDate" #date="ngModel" [(ngModel)]="service.formData.createdDate">
           <div class="field">
             <div class="titleField">Назва страви:</div>
-            <input  name="name" #name="ngModel" [(ngModel)]="service.formData.name" class="form-control" required>
+            <input name="name" #name="ngModel" [(ngModel)]="service.formData.name" class="form-control" required>
           </div>
-    
           <div class="field">
             <div class="titleField">Рецепт:</div>
             <textarea type="text" name="description" #description="ngModel" [(ngModel)]="service.formData.description"
               class="form-control">
                 </textarea>
           </div>
-    
           <div class="field">
-            <button type="submit" (click)="modalRef.hide()" [disabled]="form.invalid" class="btnAdd">Додати</button>
+            <button type="submit" (click)="modalRef.hide()" [disabled]="form.invalid" class="btnAdd"
+              *ngIf="showCreateModal">Додати</button>
+            <button type="submit" (click)="modalRef.hide()" [disabled]="form.invalid" class="btnAdd"
+              *ngIf="!showCreateModal">Змінити</button>
           </div>
-    
         </form>
       </div>
-
-      
     </ng-template>
   </main>
-
 </div>

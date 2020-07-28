@@ -5,6 +5,7 @@ import { Recipe } from "../app/shared/classes/recipe.model";
 import { RecipesService } from "../app/shared/services/recipes.service";
 import { IRecipe } from './shared/interfaces/recipe.interfaces';
 
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -12,38 +13,69 @@ import { IRecipe } from './shared/interfaces/recipe.interfaces';
 })
 export class AppComponent {
 
-
   constructor(private modalService: BsModalService,
     public service: RecipesService) { }
 
   title = 'CookBook';
   modalRef: BsModalRef;
   formData: Recipe;
-  recipes: Array<IRecipe> = [];
   recipe: IRecipe;
-  editStatus: boolean;
-  name: string;
+  nameRecipe: string;
   id: number;
-  idParent: number;
+  parentId: number;
   description: string;
-  date: string;
-  collection: Array<IRecipe>;
+  createdDate: string;
+  recipeList: any = [];
+  editStatus: boolean = false;
+  showCreateModal: boolean = true;
+  readMore: boolean = false;
+  showChildrens: boolean = false;
 
   ngOnInit() {
-    this.getAllRecipes();
-    this.resetForm();
+    this.getAllRecipes("");
   }
 
-
-  getAllRecipes() {
-    this.service.getJSONRecipes().subscribe(
+  getAllRecipes(id) {
+    this.service.getAll(id).subscribe(
       data => {
-        this.recipes = data;
+        this.recipeList = data;
+        this.recipeList.forEach(element => {
+          element.children = [];
+        });
+      }, error => {
+        console.log(error);
       }
     );
-    this.resetForm();
   }
 
+  showChildren(recipe, event?) {
+    this.showChildrens = !this.showChildrens;
+    this.recipe = recipe;
+    if (this.showChildrens) {
+      this.service.getAll(recipe.id).subscribe(
+        data => {
+          recipe.children = data;
+          this.showChildrens = true;
+          event.target.className = 'fa fa-angle-up';
+        }
+      )
+    } else {
+      recipe.children = [];
+      this.showChildrens = false;
+      event.target.className = 'fa fa-angle-down';
+    }
+  }
+
+  showText(event) {
+    this.readMore = !this.readMore;
+    if (this.readMore) {
+      event.target.classList = 'descriptionBig';
+      this.readMore = true;
+    } else {
+      event.target.classList = 'descriptionLittle';
+      this.readMore = false;
+    }
+  }
 
   resetForm(form?) {
     if (form != null) {
@@ -51,45 +83,88 @@ export class AppComponent {
     }
     this.service.formData = {
       id: null,
-      idParent: null,
+      parentId: null,
       name: '',
-      date: '',
       description: '',
-      collection: []
+      createdDate: '',
+      children: []
     };
   }
 
   openModal(template: TemplateRef<any>, recipe) {
     this.modalRef = this.modalService.show(template);
-    console.log(recipe);
-    this.recipe = this.recipe;
+    this.recipe = recipe;
+    this.showCreateModal = true;
+    this.resetForm();
 
+  }
+
+  onEdit(template: TemplateRef<any>, recipe) {
+    this.modalRef = this.modalService.show(template);
+    this.service.formData = Object.assign({}, recipe);
+    this.editStatus = true;
+    this.showCreateModal = false;
   }
 
   onSubmit(form: NgForm) {
     const data: IRecipe = Object.assign({}, form.value);
-    let d = new Date();
-    console.log(d.getTime());
-
-    // data.date = toString(new Date());
-    // console.log(data.date);
-
-    // if (!this.editStatus) {
-    this.service.postJSONRecipes(data)
-      .subscribe(
-        res => {
-          console.log(res);
-          this.getAllRecipes();
-        });
-    // } else {
-    //   this.service.updateBanknote(data).subscribe(
-    //     () => {
-    //       this.getForAdmin();
-    //     }
-    //   )
-    // }
+    if (this.editStatus) {
+      this.updateRecipe(data);
+    } else {
+      this.createRecipe(data);
+    }
     this.editStatus = false;
     this.resetForm();
   }
 
+  private createRecipe(data: IRecipe) {
+    data.parentId = this.recipe.id;
+    this.service.create(data)
+      .subscribe(
+        res => {
+          let response = JSON.parse(JSON.stringify(res));
+          if (response.parentId) {
+            this.showChildren(this.recipe);
+          }
+          else {
+            this.recipeList.push(res);
+          }
+        })
+  }
+
+  private updateRecipe(data: IRecipe) {
+    this.service.update(data).subscribe(
+      data => {
+        let response = JSON.parse(JSON.stringify(data));
+        if (response.parentId) {
+          for (const iterator of this.recipeList) {
+            this.showUpdatedRecipe(iterator, response); //todo: replace method with ngRx
+          }
+          this.recipe = response;
+        }
+        else {
+          for (const key in this.recipeList) {
+            if (this.recipeList[key].id == response.id) {
+              this.recipeList[key] = response;
+              return this.recipeList;
+            }
+          }
+        }
+      }
+    )
+  }
+
+  showUpdatedRecipe(recipe: IRecipe, response: IRecipe) {
+    if (recipe.id == response.id) {
+      recipe.name = response.name;
+      recipe.description = response.description;
+      return;
+    }
+    else if (recipe.children && recipe.children.length > 0) {
+      for (const child of recipe.children) {
+        this.showUpdatedRecipe(child, response);
+      }
+
+    }
+  }
 }

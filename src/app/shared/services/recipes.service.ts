@@ -4,25 +4,33 @@ import { Observable } from 'rxjs';
 import { IRecipe } from "../interfaces/recipe.interfaces";
 import { Recipe } from "../classes/recipe.model";
 
+const baseUrl: string = "http://localhost:8080";
+
+
 @Injectable({
   providedIn: 'root'
 })
+
 export class RecipesService {
-  private url: string;
   formData: Recipe;
 
-  constructor(private http: HttpClient) {
-    this.url = "http://localhost:3000/recipes"
+  constructor(private http: HttpClient) { }
+
+  getAll(id?) {
+    return this.http.get(baseUrl + '/parentId?parentId=' +id);
   }
 
-  getJSONRecipes(): Observable<Array<IRecipe>> {
-    return this.http.get<Array<IRecipe>>(this.url)
+  get(id) {
+    return this.http.get(`${baseUrl}/${id}`);
   }
 
-  postJSONRecipes(recipe): Observable<Array<IRecipe>> {
-    return this.http.post<Array<IRecipe>>(this.url, recipe)
+  create(data) {
+    return this.http.post(baseUrl, data);
+  }
+  
+  update(data){
+    return this.http.put(`${baseUrl}`,data);
   }
 
- 
 
 }

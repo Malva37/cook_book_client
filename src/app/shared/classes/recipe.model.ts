@@ -3,11 +3,11 @@ import { IRecipe } from "../interfaces/recipe.interfaces";
 export class Recipe implements IRecipe {
     constructor(
         public id: number,
-        public idParent: number,
+        public parentId: number,
         public name: string,
-        public date: string,
         public description: string,
-        public collection: Array<IRecipe>
+        public createdDate: string,
+        public children?:Array<IRecipe>
     ) { }
 
 }
